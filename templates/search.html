@@ -1,0 +1,57 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>List of flights!!!</h1>
+<form>
+
+</form>
+<style>
+  /* Target the first and last th elements */
+  .rounded-table th:first-child {
+    border-top-left-radius: 0.25rem; /* Adjust the radius as needed */
+  }
+  .rounded-table th:last-child {
+    border-top-right-radius: 0.25rem; /* Adjust the radius as needed */
+  }
+</style>
+    <table style="border-collapse: collapse; width: 100%;">
+    <thead class="rounded-table" style="background-color: rgb(35, 145, 229);">
+      <tr style="background-color:  rgb(35, 145, 229);">
+        <th>Origin City</th>
+        <th>Destination City</th>
+        <th>Airline</th>
+        <th>NoofConnection</th>
+        <th>Depart Date</th>
+        <th>Available Seats</th>
+        <th>price</th>
+         <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for flight in flights %}
+      <form id="flightForm-{{ flight.id }}" class="booking" action="{{ url_for('bookingdetails') }}" method="POST">
+        <tr style="border: 1px solid #000000;">
+          <td style="padding: 8px; text-align: left;">{{ flight.origin_city }}</td>
+          <td style="padding: 8px; text-align: left;">{{ flight.destination_city }}</td>
+          <td style="padding: 8px; text-align: left;">{{ flight.airline }}</td>
+          <td style="padding: 8px; text-align: left;">{{ flight.NoofConnection }}</td>
+          <td style="padding: 8px; text-align: left;">{{ flight.depart_date }}</td>
+          <td style="padding: 8px; text-align: left;">{{ flight.available_seates }}</td>
+          <td style="padding: 8px; text-align: left;">{{ flight.price }}</td>
+          <td>
+            <input type="hidden" name="origin_city" value="{{flight.origin_city}}"/>
+            <input type="hidden" name="destination_city" value="{{flight.destination_city}}"/>
+            <input type="hidden" name="airline" value="{{flight.airline}}"/>
+            <input type="hidden" name="NoofConnection" value="{{flight.NoofConnection}}"/>
+            <input type="hidden" name="depart_date" value="{{flight.depart_date}}"/>
+            <input type="hidden" name="available_seates" value="{{flight.available_seates}}"/>
+            <input type="hidden" name="price" value="{{flight.price}}"/>
+            <button type="submit" class="btn btn-primary">Book</button>
+          </td>
+        </tr>
+      </form>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

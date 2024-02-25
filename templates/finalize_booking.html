@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <!-- Card representing the ticket -->
+            <div class="card text-center">
+                <!-- Card Header -->
+                <div class="card-header">
+                    <h1 class="card-title">Ticket Confirmation</h1>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <h2 class="card-title">The ticket has been booked!!!</h2>
+                    <p class="card-text"><strong>Name:</strong> {{ flight_details.name }}</p>
+                    <p class="card-text"><strong>Email:</strong> {{ flight_details.email }}</p>
+                    <p class="card-text"><strong>SeatId:</strong> {{ flight_details.seatId }}</p>
+                    <p class="card-text"><strong>Origin City:</strong> {{ flight_details.origin_city }}</p>
+                    <p class="card-text"><strong>Destination City:</strong> {{ flight_details.destination_city }}</p>
+                    <p class="card-text"><strong>Airline:</strong> {{ flight_details.airline }}</p>
+                    <p class="card-text"><strong>NoofConnection:</strong> {{ flight_details.NoofConnection }}</p>
+                    <p class="card-text"><strong>Departure Date:</strong> {{ flight_details.depart_date }}</p>
+                </div>
+                <!-- Card Footer -->
+                <div class="card-footer text-muted">
+                    Safe Travels!
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
