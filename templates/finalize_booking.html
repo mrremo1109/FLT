@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="ticket-container">
+        <!-- Ticket -->
+        <div class="ticket">
+            <div class="ticket-header bg-primary text-white">
+                <h1 class="ticket-title">Boarding Pass</h1>
+            </div>
+            <div class="ticket-body bg-light">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 ticket-section">
+                        <h3>{{ flight_details.airline }}</h3>
+                        <p>Passenger Name: <strong>{{ flight_details.name }}</strong></p>
+                        <p>Seat: <strong>{{ flight_details.seatId }}</strong></p>
+                    </div>
+                    <div class="col-sm-6 col-md-4 ticket-section">
+                        <p>Origin: <strong>{{ flight_details.origin_city }}</strong></p>
+                        <p>Destination: <strong>{{ flight_details.destination_city }}</strong></p>
+                    </div>
+                    <div class="col-md-4 ticket-section">
+                        <p>Departure Date: <strong>{{ flight_details.depart_date }}</strong></p>
+                        <p>No. of Connections: <strong>{{ flight_details.NoofConnection }}</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div class="ticket-footer bg-primary text-white text-center">
+                <p>Have a pleasant journey!</p>
+                <button onclick="window.print();" class="btn btn-primary no-print">Print Ticket</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .ticket-container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+    }
+    
+    .ticket {
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    .ticket-header, .ticket-footer {
+        padding: 10px 20px;
+    }
+    
+    .ticket-title {
+        margin: 0;
+        text-align: center;
+    }
+    
+    .ticket-body {
+        padding: 20px;
+        border-top: 3px solid #007bff;
+        border-bottom: 3px solid #007bff;
+    }
+    
+    .ticket-section {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px dotted #ccc;
+    }
+    
+    .ticket-section:last-child {
+        border-bottom: none;
+    }
+    
+    @media print {
+        .no-print {
+            display: none;
+        }
+        .bg-primary {
+            color: black;
+            background: white;
+        }
+        .text-white {
+            color: black;
+            background: white;
+        }
+    }
+    .info-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);}
+.info-title {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.map-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.map-image {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.info-details {
+    color: #555;
+}
+.distance, .city-name {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.weather-info, .attractions-info {
+    margin-bottom: 15px;
+}
+.weather-info h4, .attractions-info h4 {
+    margin-bottom: 5px;
+    color: #007bff;
+}
+.attractions-list {
+    padding-left: 20px;
+}
+</style>
+
+<div class="container mt-5">
+    <div class="info-box">
+        <h2 class="info-title">Map & Destination Info</h2>
+        <div class="map-container">
+            <img src="{{ map_url }}" alt="Map Route" class="map-image">
+        </div>
+        <div class="info-details">
+            <p class="distance"><strong>Distance to Destination:</strong> {{ distance }}</p>
+            <h3 class="city-name">City: {{ flight_details.destination_city }}</h3>
+            <div class="weather-info">
+                <h4>Current Weather</h4>
+                <p><strong>Temperature:</strong> {{ weather.main.temp }}&deg;C</p>
+                <p><strong>Condition:</strong> {{ weather.weather[0].description }}</p>
+            </div>
+            <div class="attractions-info">
+                <h4>Nearby Attractions</h4>
+                <ul class="attractions-list">
+                    {% for attraction in attractions[:10] %}
+                    <li>{{ attraction.name }} - {{ attraction.vicinity }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.info-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+.info-title {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.map-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.map-image {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.info-details {
+    color: #555;
+}
+.distance, .city-name {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.weather-info, .attractions-info {
+    margin-bottom: 15px;
+}
+.weather-info h4, .attractions-info h4 {
+    margin-bottom: 5px;
+    color: #007bff;
+}
+.attractions-list {
+    padding-left: 20px;
+}
+</style>
+{% endblock %}
+
+
+
+
+
