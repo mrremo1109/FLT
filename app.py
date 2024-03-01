@@ -1,5 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, current_app
+import json, jsonify
 import sqlite3
+from datetime import datetime
+import os
+print(os.getcwd())
 import googlemaps
 import requests
 
@@ -19,10 +23,8 @@ def execute_query(sql, params=None):
     else:
         cursor.execute(sql)
     if sql.strip().lower().startswith('select'):
-        # This is a SELECT query, so we should fetch the results
         res = cursor.fetchall()
     else:
-        # This is not a SELECT query, so there are no results to fetch
         conn.commit()
         res = None
     cursor.close()
@@ -33,13 +35,23 @@ def execute_query(sql, params=None):
 def index():
     return render_template('index.html')
 
+@app.route('/currency_rates')
+def currency_rates():
+    # Load your currency rates from the 'currency_rates.json' file
+    with open("C:\\Users\\mrrem\\myproject\\flight-travel-agency\\currency_rates.json", mode='r') as file:
+        rates = json.load(file)
+    return jsonify(rates)
+
+
 @app.route('/search')
 def search():
     origin_city = request.args.get('originCity')
     destination_city = request.args.get('destinationCity')
     sql = "SELECT * FROM flights WHERE origin_city=? AND destination_city=? AND depart_date>=DATE('now')"
+    with open("C:\\Users\\mrrem\\myproject\\flight-travel-agency\\currency_rates.json", mode='r') as file:
+        rates = json.load(file)
     flights = execute_query(sql, (origin_city, destination_city))
-    return render_template('search.html', flights=flights)
+    return render_template('search.html', flights=flights, rates=rates)
 
 @app.route('/bookingdetails', methods=['POST'])
 def bookingdetails():
@@ -72,7 +84,7 @@ def get_weather_info(city_name, openweather_api_key):
     params = {
         'q': city_name,
         'appid': openweather_api_key,
-        'units': 'metric'  # For temperature in Celsius
+        'units': 'metric'
     }
     response = requests.get(endpoint_url, params=params)
     if response.status_code == 200:
