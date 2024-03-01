@@ -1,57 +1,98 @@
-
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>List of flights!!!</h1>
-<form>
-
-</form>
-<style>
-  /* Target the first and last th elements */
-  .rounded-table th:first-child {
-    border-top-left-radius: 0.25rem; /* Adjust the radius as needed */
-  }
-  .rounded-table th:last-child {
-    border-top-right-radius: 0.25rem; /* Adjust the radius as needed */
-  }
-</style>
-    <table style="border-collapse: collapse; width: 100%;">
+<h1 class="text-light">LIST OF FLIGHTS!</h1>
+<div style="background-color: white; width: 103%;">
+  <style>
+    @media (max-width: 768px) {
+      table {
+        width: 100%;
+      }
+      th, td {
+        padding: 5px;
+        font-size: 12px;
+      }
+      .hide-on-small {
+        display: none;
+      }
+    }
+    .scrollable-table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  </style>
+  
+  <div class="scrollable-table">
+  <table style="border-collapse: collapse; width: 105%;">
     <thead class="rounded-table" style="background-color: rgb(35, 145, 229);">
       <tr style="background-color:  rgb(35, 145, 229);">
         <th>Origin City</th>
         <th>Destination City</th>
         <th>Airline</th>
         <th>NoofConnection</th>
-        <th>Depart Date</th>
+        <th style="text-align: center;">Depart Date</th>
         <th>Available Seats</th>
-        <th>price</th>
-         <th>Action</th>
+        <th>Duration</th>
+        <th>Layover</th>
+        <th>Price</th>
+        <th>CONCURRENCY</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
       {% for flight in flights %}
-      <form id="flightForm-{{ flight.id }}" class="booking" action="{{ url_for('bookingdetails') }}" method="POST">
         <tr style="border: 1px solid #000000;">
-          <td style="padding: 8px; text-align: left;">{{ flight.origin_city }}</td>
-          <td style="padding: 8px; text-align: left;">{{ flight.destination_city }}</td>
-          <td style="padding: 8px; text-align: left;">{{ flight.airline }}</td>
-          <td style="padding: 8px; text-align: left;">{{ flight.NoofConnection }}</td>
-          <td style="padding: 8px; text-align: left;">{{ flight.depart_date }}</td>
-          <td style="padding: 8px; text-align: left;">{{ flight.available_seates }}</td>
-          <td style="padding: 8px; text-align: left;">{{ flight.price }}</td>
+          <td class="centered-text" style="text-align: center;">{{ flight.origin_city }}</td>
+          <td class="centered-text" style="text-align: center;">{{ flight.destination_city }}</td>
+          <td class="centered-text">{{ flight.airline }}</td>
+          <td class="centered-text" style="text-align: center;">{{ flight.NoofConnection }}</td>
+          <td class="centered-text" style="text-align: center;">{{ flight.depart_date }}</td>
+          <td class="centered-text" style="text-align: center;">{{ flight.available_seates }}</td>
+          <td class="centered-text" style="text-align: center;">{{ flight.Duration }}</td>
+          <td class="centered-text" style="text-align: center;">{{ flight.Layover }}</td>
+          <td class="centered-text" style="text-align: center;">{{ flight.price }}</td>
+          <td type="hidden" class="centered-text price" data-base-price="{{ flight.price }}" style="text-align: center;">{{ flight.price }}</td>
           <td>
-            <input type="hidden" name="origin_city" value="{{flight.origin_city}}"/>
-            <input type="hidden" name="destination_city" value="{{flight.destination_city}}"/>
-            <input type="hidden" name="airline" value="{{flight.airline}}"/>
-            <input type="hidden" name="NoofConnection" value="{{flight.NoofConnection}}"/>
-            <input type="hidden" name="depart_date" value="{{flight.depart_date}}"/>
-            <input type="hidden" name="available_seates" value="{{flight.available_seates}}"/>
-            <input type="hidden" name="price" value="{{flight.price}}"/>
-            <button type="submit" class="btn btn-primary">Book</button>
-          </td>
+            <form id="flightForm-{{ flight.id }}" class="booking" action="/bookingdetails" method="post">
+                <input type="hidden" name="origin_city" value="{{ flight.origin_city }}">
+                <input type="hidden" name="destination_city" value="{{ flight.destination_city }}">
+                <input type="hidden" name="airline" value="{{ flight.airline }}">
+                <input type="hidden" name="NoofConnection" value="{{ flight.NoofConnection }}">
+                <input type="hidden" name="depart_date" value="{{ flight.depart_date }}">
+                <input type="hidden" name="available_seates" value="{{ flight.available_seates }}">
+                <input type="hidden" name="Duration" value="{{ flight.Duration }}">
+                <input type="hidden" name="Layover" value="{{ flight.Layover }}">
+                <input type="hidden" name="BaggageInfo" value="{{ flight.BaggageInfo }}">
+                <input type="hidden" name="price" value="{{ flight.price }}">
+                
+                <button type="submit" class="btn btn-primary">Book</button>
+            </form>
+        </td>
         </tr>
-      </form>
       {% endfor %}
     </tbody>
   </table>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var rates = {{ rates | tojson | safe }};
+    var currencySelector = document.getElementById('currency');
+  
+    currencySelector.addEventListener('change', function(event) {
+      var selectedCurrency = event.target.value;
+      var rate = rates[selectedCurrency];
+      updatePrices(rate);
+    });
+  
+    function updatePrices(rate) {
+      var prices = document.querySelectorAll('.price');
+      prices.forEach(function(priceElement) {
+        var basePrice = parseFloat(priceElement.getAttribute('data-base-price'));
+        var newPrice = (basePrice * rate).toFixed(2);
+        priceElement.textContent = newPrice;
+      });
+    }
+  });
+  </script>
 {% endblock %}

@@ -1,37 +1,72 @@
-{% extends 'base.html' %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-{% block content %}
-<div class="container mt-5">
-    <div class="ticket-container">
-        <!-- Ticket -->
-        <div class="ticket">
-            <div class="ticket-header bg-primary text-white">
-                <h1 class="ticket-title">Boarding Pass</h1>
-            </div>
-            <div class="ticket-body bg-light">
-                <div class="row">
-                    <div class="col-sm-6 col-md-4 ticket-section">
-                        <h3>{{ flight_details.airline }}</h3>
-                        <p>Passenger Name: <strong>{{ flight_details.name }}</strong></p>
-                        <p>Seat: <strong>{{ flight_details.seatId }}</strong></p>
-                    </div>
-                    <div class="col-sm-6 col-md-4 ticket-section">
-                        <p>Origin: <strong>{{ flight_details.origin_city }}</strong></p>
-                        <p>Destination: <strong>{{ flight_details.destination_city }}</strong></p>
-                    </div>
-                    <div class="col-md-4 ticket-section">
-                        <p>Departure Date: <strong>{{ flight_details.depart_date }}</strong></p>
-                        <p>No. of Connections: <strong>{{ flight_details.NoofConnection }}</strong></p>
+    <title>{% block title %} {% endblock %}</title>
+    <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      background-image: url('https://images.pexels.com/photos/175656/pexels-photo-175656.jpeg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-color: #1c87c9
+    }
+
+    .container {
+      padding-top: 70px;
+    }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-primary">
+        <a class="navbar-brand h3 text-white" href="{{ url_for('index') }}">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mr-auto">
+          </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <div class="ticket-container">
+            <div class="ticket">
+                <div class="ticket-header bg-primary text-white">
+                    <h1 class="ticket-title">TICKET CONFIRMATION</h1>
+                </div>
+                <div class="ticket-body bg-light">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 ticket-section">
+                            <h4>{{ flight_details.airline }}</h4>
+                            <p>Passenger Name: <strong>{{ flight_details.name }}</strong></p>
+                            <p>Class: <strong>{{ flight_details.seatId }}</strong></p>
+                            <p>Origin: <strong>{{ flight_details.origin_city }}</strong></p>
+                            <p>Destination: <strong>{{ flight_details.destination_city }}</strong></p>
+                        </div>
+                        <div class="col-sm-6 col-md-6 ticket-section">
+                            <p>Departure Date: <strong>{{ flight_details.depart_date }}</strong></p>
+                            <p>No. of Connections: <strong>{{ flight_details.NoofConnection }}</strong></p>
+                            <p>Duration: <strong>{{ flight_details.Duration}}</strong></p>
+                            <p>Layover Duration: <strong>{{ flight_details.Layover }}</strong></p>
+                            <p>BaggageInfo: <strong>{{ flight_details.BaggageInfo }}</strong></p>
+                        </div>
+                        <div class="col-md-12 ticket-section text-center" style="margin-bottom: 0;">
+                            <h3>PRICE: {{ request.form.get('converted_price') }} {{ selected_currency }}</h3>                          
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="ticket-footer bg-primary text-white text-center">
-                <p>Have a pleasant journey!</p>
-                <button onclick="window.print();" class="btn btn-primary no-print">Print Ticket</button>
+                <div class="ticket-footer bg-primary text-white text-center">
+                    <p>Have a pleasant journey!</p>
+                    <button onclick="window.print();" class="btn btn-light no-print">Print Ticket</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 <style>
     .ticket-container {
@@ -191,7 +226,9 @@
     padding-left: 20px;
 }
 </style>
-{% endblock %}
+
+
+</body>
 
 
 
