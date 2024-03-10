@@ -1,54 +1,156 @@
-{% extends 'base.html' %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-{% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <!-- Card for the form -->
-            <div class="card">
-                <!-- Card header -->
-                <div class="card-header">
-                    <h3 class="text-center">Enter Your Details</h3>
-                </div>
-                
-                <div class="card-body">
-                    <form action="/finalize_booking" method="post">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email address</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="seatId">SeatID</label>
-                            <select class="form-control" id="seatId" name="seatId" placeholder="Enter your seat ID" required>
-                            <option value="">Select</option>
-                            <option value="Economy">Economy</option>
-                            <option value="FirstClass">FirstClass</option>
-                            <option value="PremiumClass">PremiumClass</option>
-                            <option value="BusinessClass">BusinessClass</option>
-                        </div>
-                        <input type="hidden" name="origin_city" value="{{ flight_details.origin_city }}">
-                        <input type="hidden" name="destination_city" value="{{ flight_details.destination_city }}">
-                        <input type="hidden" name="airline" value="{{ flight_details.airline }}">
-                        <input type="hidden" name="NoofConnection" value="{{ flight_details.NoofConnection }}">
-                        <input type="hidden" name="depart_date" value="{{ flight_details.depart_date }}">
-                        <input type="hidden" name="available_seats" value="{{ flight_details.available_seats }}">
-                        <input type="hidden" name="Duration" value="{{ flight_details.Duration }}">
-                        <input type="hidden" name="Layover" value="{{ flight_details.Layover }}">
-                        <input type="hidden" name="BaggageInfo" value="{{ flight_details.BaggageInfo }}">
-                        <input type="hidden" name="price" value="{{ flight_details.price }}">
+    <title>HOMEPAGE</title>
+    <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      background-image: url('https://wallpapercave.com/wp/wp6493600.jpg');
+      background-size: cover;
+      background-repeat: repeat;
+      background-position: center;
+      background-color: white;
+    }
 
-                        <div class="mb-3"></div>
-                        
-                        <button type="submit" class="btn btn-primary btn-block">Submit Booking</button>
-                        
-                    </form>
+    .container {
+      padding-top: 60px;
+    }
+
+    .custom-table {
+        background-color: #f8f9fa;
+        color: #212529;
+        border-color: #dee2e6;
+        
+    }
+
+.card {
+    border-radius: 20px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #007bff; 
+    color: #ffffff;
+    border-top-left-radius: 20px; 
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 0; 
+    border-bottom-right-radius: 0; 
+}
+
+.card-body {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px; 
+}
+
+.form-control {
+    border-radius: 10px;
+}
+
+.btn-primary {
+    border-radius: 20px; 
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-primary">
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                  <a class="navbar-brand mx-auto text-white" href="{{ url_for('bookedticket') }}">BOOKED TICKETS</a>
+                </li>
+            </ul>
+        </div>
+        <div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto text-white" href="{{ url_for('index') }}">HOME</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+    <dev style="color: #ffffff;" >
+        <center>
+            <h3>BOOK YOUR TICKET!!!</h3>
+        </center>
+    </dev>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Enter Your Details</h3>
+                    </div>
+                    
+                    <div class="card-body">
+                        <form action="/finalize_booking" method="post">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email address</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="seatId">SeatID</label>
+                                <select class="form-control" id="seatId" name="seatId" placeholder="Enter your seat ID" required>
+                                <option value="">Select</option>
+                                <option value="A1">A1</option>
+                                <option value="A2">A2</option>
+                                <option value="B1">B1</option>
+                                <option value="B2">B2</option>
+                                </select>
+                            </div>
+                            <input type="hidden" id="name"  name="name">
+                            <input type="hidden" id="email" name="email">
+                            <input type="hidden" id="seatId" name="seatId">
+                            <input type="hidden" id="flightId" name="flight_id">
+                            <input type="hidden" id="originCity" name="origin_city">
+                            <input type="hidden" id="destinationCity" name="destination_city">
+                            <input type="hidden" id="airline" name="airline">
+                            <input type="hidden" id="NoofConnection" name="NoofConnection">
+                            <input type="hidden" id="departdate" name="depart_date">
+                            <input type="hidden" id="availableSeats" name="available_seats">
+                            <input type="hidden" id="Duration" name="Duration">
+                            <input type="hidden" id="Layover" name="Layover">
+                            <input type="hidden" id="BaggageInfo" name="BaggageInfo">
+                            <input type="hidden" id="price" name="price">
+                            <input type="hidden" name="priceInSelectedCurrency" value="${flight.converted_price || flight.price} ${flight.currency || 'USD'}"/>
+                            <div class="mb-3"></div>
+                            <button type="submit" class="btn btn-primary btn-block">Submit Booking</button>
+                            
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-{% endblock %}
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    var flightDetails = JSON.parse(localStorage.getItem('flightDetails'));
+    if (flightDetails) {
+        document.getElementById("flightId").value = flightDetails.flight_id;
+        document.getElementById("originCity").value = flightDetails.origin_city;
+        document.getElementById("destinationCity").value = flightDetails.destination_city;
+        document.getElementById("airline").value = flightDetails.airline;
+        document.getElementById("NoofConnection").value = flightDetails.NoofConnection;
+        document.getElementById("departdate").value = flightDetails.depart_date;
+        document.getElementById("availableSeats").value = flightDetails.available_seates;
+        document.getElementById("Duration").value = flightDetails.Duration;
+        document.getElementById("Layover").value = flightDetails.Layover;
+        document.getElementById("BaggageInfo").value = flightDetails.BaggageInfo;
+        document.getElementById("price").value = flightDetails.price;
+        document.getElementById("priceInSelectedCurrency").value = `${flightDetails.converted_price || flightDetails.price} ${flightDetails.currency || 'USD'}`;
+    }
+});
+
+</script>
+</html>

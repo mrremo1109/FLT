@@ -1,98 +1,310 @@
-{% extends 'base.html' %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-{% block content %}
-<h1 class="text-light">LIST OF FLIGHTS!</h1>
-<div style="background-color: white; width: 103%;">
-  <style>
-    @media (max-width: 768px) {
-      table {
-        width: 100%;
-      }
-      th, td {
-        padding: 5px;
-        font-size: 12px;
-      }
-      .hide-on-small {
-        display: none;
-      }
+    <title>HOMEPAGE</title>
+    <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      background-image: url('https://wallpapercave.com/wp/wp6493600.jpg');
+      background-size: cover;
+      background-repeat: repeat;
+      background-position: center;
+      background-color: white
     }
-    .scrollable-table {
-      display: block;
-      overflow-x: auto;
-      white-space: nowrap;
+
+    .container {
+      padding-top: 70px;
     }
-  </style>
-  
-  <div class="scrollable-table">
-  <table style="border-collapse: collapse; width: 105%;">
-    <thead class="rounded-table" style="background-color: rgb(35, 145, 229);">
-      <tr style="background-color:  rgb(35, 145, 229);">
-        <th>Origin City</th>
-        <th>Destination City</th>
-        <th>Airline</th>
-        <th>NoofConnection</th>
-        <th style="text-align: center;">Depart Date</th>
-        <th>Available Seats</th>
-        <th>Duration</th>
-        <th>Layover</th>
-        <th>Price</th>
-        <th>CONCURRENCY</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for flight in flights %}
-        <tr style="border: 1px solid #000000;">
-          <td class="centered-text" style="text-align: center;">{{ flight.origin_city }}</td>
-          <td class="centered-text" style="text-align: center;">{{ flight.destination_city }}</td>
-          <td class="centered-text">{{ flight.airline }}</td>
-          <td class="centered-text" style="text-align: center;">{{ flight.NoofConnection }}</td>
-          <td class="centered-text" style="text-align: center;">{{ flight.depart_date }}</td>
-          <td class="centered-text" style="text-align: center;">{{ flight.available_seates }}</td>
-          <td class="centered-text" style="text-align: center;">{{ flight.Duration }}</td>
-          <td class="centered-text" style="text-align: center;">{{ flight.Layover }}</td>
-          <td class="centered-text" style="text-align: center;">{{ flight.price }}</td>
-          <td type="hidden" class="centered-text price" data-base-price="{{ flight.price }}" style="text-align: center;">{{ flight.price }}</td>
-          <td>
-            <form id="flightForm-{{ flight.id }}" class="booking" action="/bookingdetails" method="post">
-                <input type="hidden" name="origin_city" value="{{ flight.origin_city }}">
-                <input type="hidden" name="destination_city" value="{{ flight.destination_city }}">
-                <input type="hidden" name="airline" value="{{ flight.airline }}">
-                <input type="hidden" name="NoofConnection" value="{{ flight.NoofConnection }}">
-                <input type="hidden" name="depart_date" value="{{ flight.depart_date }}">
-                <input type="hidden" name="available_seates" value="{{ flight.available_seates }}">
-                <input type="hidden" name="Duration" value="{{ flight.Duration }}">
-                <input type="hidden" name="Layover" value="{{ flight.Layover }}">
-                <input type="hidden" name="BaggageInfo" value="{{ flight.BaggageInfo }}">
-                <input type="hidden" name="price" value="{{ flight.price }}">
-                
-                <button type="submit" class="btn btn-primary">Book</button>
-            </form>
-        </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var rates = {{ rates | tojson | safe }};
-    var currencySelector = document.getElementById('currency');
-  
-    currencySelector.addEventListener('change', function(event) {
-      var selectedCurrency = event.target.value;
-      var rate = rates[selectedCurrency];
-      updatePrices(rate);
-    });
-  
-    function updatePrices(rate) {
-      var prices = document.querySelectorAll('.price');
-      prices.forEach(function(priceElement) {
-        var basePrice = parseFloat(priceElement.getAttribute('data-base-price'));
-        var newPrice = (basePrice * rate).toFixed(2);
-        priceElement.textContent = newPrice;
-      });
+
+    /* Custom styles for the table */
+    .custom-table {
+        background-color: #f8f9fa; /* Change background color */
+        color: #212529; /* Change text color */
+        border-color: #dee2e6; /* Change border color */
+        /* Add any additional styles you want */
     }
-  });
-  </script>
-{% endblock %}
+
+    /* Additional styles for table rows */
+    .custom-table tbody tr:hover {
+        background-color: #e9ecef; /* Change background color on hover */
+    }
+
+    /* Additional styles for table headings */
+    .custom-table th {
+        background-color: #007bff; /* Change background color of table headings */
+        color: #ffffff; /* Change text color of table headings */
+    }
+    .form-row {
+    margin-bottom: 20px;
+}
+
+/* Additional styles for inputs and selects */
+.form-control {
+    border-radius: 20px; /* Add curved border */
+}
+
+/* Additional styles for search button */
+#searchFlightsBtn {
+    border-radius: 20px; /* Add curved border */
+}
+
+/* Additional styles for table */
+.table {
+    border-radius: 20px; /* Add curved border */
+    overflow: hidden; /* Hide overflow content */
+}
+
+/* Additional styles for table rows */
+.table tbody tr:hover {
+    background-color: #e9ecef; /* Change background color on hover */
+}
+
+/* Additional styles for table headings */
+.table th {
+    background-color: #007bff; /* Change background color of table headings */
+    color: #ffffff; /* Change text color of table headings */
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-primary">
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                  <a class="navbar-brand mx-auto text-white" href="{{ url_for('bookedticket') }}">BOOKED TICKETS</a>
+                </li>
+            </ul>
+        </div>
+        <div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto text-white" href="{{ url_for('index') }}">HOME</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+    <div style="color: #ffffff;" >
+        <center>
+            <h3>BOOK YOUR TICKET!!!</h3>
+        </center>
+    </div>
+    <div style="color: aliceblue;" class="container">
+        <form id="searchForm" action="/bookingdetails" method="post">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="originCity">Origin City:</label>
+                    <select id="originCity" name="originCity" class="form-control">
+                        <option value="">Select...</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="destinationCity">Destination City:</label>
+                    <select id="destinationCity" name="destinationCity" class="form-control">
+                        <option value="">Select...</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="departdate">Depart Date:</label>
+                    <input type="date" id="departdate" name="departdate" class="form-control mb-2 mr-sm-2">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="airline">Airline:</label>
+                    <select id="airline" name="airline" class="form-control">
+                        <option value="">Select...</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="currencySelect">Currency:</label>
+                    <select id="currencySelect" class="form-control">
+                        <option value="USD">USD</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="NoofConnection">No of Connection:</label>
+                    <select id="NoofConnection" class="form-control">
+                        <option value="Select">...</option>
+                        <option value="">Select...</option>
+                    </select>
+                </div>
+            </div>
+            <button type="button" id="searchFlightsBtn" class="btn btn-primary">Search Flights</button>
+        </form>
+        <div id="flightResults" class="mt-4"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script>
+        // Store the flight data and currency rates globally
+        var globalFlightData = [];
+        var globalCurrencyRates = {};
+    
+        // Fetch and populate dropdowns for origin city, destination city, departure dates, and airlines
+        function fetchAndPopulateData(apiUrl, elementId) {
+            fetch(`http://127.0.0.1:5000/api/${apiUrl}`)
+                .then(response => response.json())
+                .then(data => {
+                    populateDropdown(elementId, data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    
+        function populateDropdown(elementId, data) {
+            var dropdown = document.getElementById(elementId);
+            dropdown.innerHTML = '<option value="">Select...</option>'; // Reset dropdown
+            data.forEach(function(item) {
+                var option = document.createElement("option");
+                option.value = item;
+                option.text = item;
+                dropdown.appendChild(option);
+            });
+        }
+    
+        // Fetch and display flight results, converting prices if a currency is selected
+        function fetchFlightResults() {
+            var originCity = document.getElementById("originCity").value;
+            var destinationCity = document.getElementById("destinationCity").value;
+            var airline = document.getElementById('airline').value;
+            var selectedCurrency = document.getElementById('currencySelect').value;
+            var NoofConnection = document.getElementById('NoofConnection').value; // Get selected value from NoofConnection dropdown
+            var url = `http://127.0.0.1:5000/api/flights_data?originCity=${encodeURIComponent(originCity)}&destinationCity=${encodeURIComponent(destinationCity)}&currency=${encodeURIComponent(selectedCurrency)}&airline=${encodeURIComponent(airline)}&NoofConnection=${encodeURIComponent(NoofConnection)}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    globalFlightData = data.flights;
+                    displayFlightResults(globalFlightData);
+                })
+                .catch(error => console.error('Error fetching flight details:', error));
+        }
+    
+        // Function to display flight results
+        function displayFlightResults(flights) {
+            var flightResultsDiv = document.getElementById("flightResults");
+            flightResultsDiv.innerHTML = "";
+    
+            if (!flights.length) {
+                flightResultsDiv.textContent = "No flights found.";
+                return;
+            }
+    
+            var table = document.createElement("table");
+            table.classList.add("table", "table-bordered", "mt-2", "custom-table");
+            
+            var thead = document.createElement("thead");
+            thead.innerHTML = `
+                <tr>
+                    <th>Flight ID</th>
+                    <th>Origin</th>
+                    <th>Destination</th>
+                    <th>Depart Date</th>
+                    <th>Airline</th>
+                    <th>Available Seats</th>
+                    <th>Connection</th>
+                    <th>Duration</th>
+                    <th>Layover</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
+            `;
+            table.appendChild(thead);
+    
+            var tbody = document.createElement("tbody");
+            flights.forEach(function(flight) {
+                var row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${flight.flight_id}</td>
+                    <td>${flight.origin_city}</td>
+                    <td>${flight.destination_city}</td>
+                    <td>${flight.depart_date}</td>
+                    <td>${flight.airline}</td>
+                    <td>${flight.available_seates}</td>
+                    <td>${flight.NoofConnection}</td>
+                    <td>${flight.Duration}</td>
+                    <td>${flight.Layover}</td>
+                    <td>${flight.converted_price || flight.price} ${flight.currency || 'USD'}</td>
+                    <td>
+                        <form action="/bookingdetails" method="POST">
+                            <input type="hidden" name="flight_id" value="${flight.flight_id}"/>
+                            <input type="hidden" name="origin_city" value="${flight.origin_city}"/>
+                            <input type="hidden" name="destination_city" value="${flight.destination_city}"/>
+                            <input type="hidden" name="depart_date" value="${flight.depart_date}"/>
+                            <input type="hidden" name="airline" value="${flight.airline}"/>
+                            <input type="hidden" name="available_seates" value="${flight.available_seates}"/>
+                            <input type="hidden" name="NoofConnection" value="${flight.NoofConnection}"/>
+                            <input type="hidden" name="Duration" value="${flight.Duration}"/>
+                            <input type="hidden" name="Layover" value="${flight.Layover}"/>
+                            <input type="hidden" name="BaggageInfo" value="${flight.BaggageInfo}"/>
+                            <input type="hidden" name="price" value="${flight.price}"/>
+                            <input type="hidden" name="priceInSelectedCurrency" value="${flight.converted_price || flight.price} ${flight.currency || 'USD'}"/>
+                            <button type="submit" class="btn btn-primary bookBtn">Book</button>
+                        </form>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            table.appendChild(tbody);
+            flightResultsDiv.appendChild(table);
+
+        var bookButtons = document.querySelectorAll('.bookBtn');
+            bookButtons.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const flightData = JSON.parse(this.getAttribute('data-flight'));
+                    localStorage.setItem('flightDetails', JSON.stringify(flightData)); // Store flight details in Local Storage
+                    window.location.href = '/bookingdetails'; // Redirect to bookingdetails page
+                });
+            });
+        }
+    
+        // Fetch currency rates and populate the currency dropdown
+        function fetchAndPopulateCurrencyRates() {
+            fetch('http://127.0.0.1:5000/currency_rates')
+                .then(response => response.json())
+                .then(rates => {
+                    globalCurrencyRates = rates;
+                    var currencySelect = document.getElementById('currencySelect');
+                    currencySelect.innerHTML = '<option value="">Select Currency...</option>';
+                    for (const currency in rates) {
+                        const option = document.createElement('option');
+                        option.value = currency;
+                        option.textContent = currency;
+                        currencySelect.appendChild(option);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching currency rates:', error);
+                });
+        }
+    
+        // Event listeners on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchAndPopulateData('origincity', 'originCity');
+            fetchAndPopulateData('destinationcity', 'destinationCity');
+            fetchAndPopulateData('departuredate', 'departdate');
+            fetchAndPopulateData('airline', 'airline');
+            fetchAndPopulateData('NoofConnection', 'NoofConnection');
+            fetchAndPopulateCurrencyRates(); // Populate currency rates
+    
+            document.getElementById('searchFlightsBtn').addEventListener('click', function() {
+                fetchFlightResults();
+            });
+            document.getElementById('currencySelect').addEventListener('change', fetchFlightResults); // Re-fetch flights with the new currency when currency selection changes
+        });
+    
+        // Placeholder function for booking a flight
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('bookBtn')) {
+                // Implement the booking functionality here
+                console.log('Booking functionality not implemented.');
+            }
+        });
+    </script>
+</body>
+</html>

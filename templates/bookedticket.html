@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booked Tickets</title>
+    <style>
+        body {
+          height: 100vh;
+          margin: 0;
+          background-image: url('https://wallpapercave.com/wp/wp9215580.jpg');
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center;
+          background-color: #1c87c9;
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 20px;
+        }
+    
+        h1 {
+          text-align: center;
+          color: #333;
+        }
+    
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+    
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            color: #333;
+        }
+
+        th {
+          background-color: #007bff;
+          color: white;
+          border-radius: 10px 10px 0 0;
+          background-image: linear-gradient(to right, #007bff 0%, #0062cc 100%);
+        }
+
+    
+        tr:nth-child(even) {
+          background-color: #f2f2f2;
+        }
+        .navbar-brand {
+            font-size: 24px;
+        }
+
+        .navbar-toggler-icon {
+            color: #ffffff;
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    
+        .delete-btn {
+          background-color: #dc3545;
+          color: white;
+          padding: 5px 10px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+    
+        .delete-btn:hover {
+          background-color: #c82333;
+        }
+      </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-primary">
+        <div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto text-black" href="{{ url_for('index') }}">HOME</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+    <h1 style="color: deepskyblue;">Booked Flight Tickets</h1>
+    <table id="ticketsTable">
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Flight ID</th>
+                <th>Passenger Name</th>
+                <th>Origin</th>
+                <th>Destination</th>
+                <th>Airline</th>
+                <th>Departure Date</th>
+                <th>Seat ID</th>
+                <th>Duration</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be inserted here using JavaScript -->
+        </tbody>
+    </table>
+
+    <script>
+        function deleteBooking(bookingId, rowElement) {
+            // Make a fetch call to delete the booking from the database
+            fetch('/api/delete_booking/' + bookingId, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(data => {
+                    // If the deletion was successful, remove the row from the table
+                    if (data.success) {
+                        rowElement.remove();
+                    } else {
+                        alert('There was an error deleting the booking.');
+                    }
+                })
+                .catch(error => alert('There was an error deleting the booking.'));
+        }
+
+        function deleteBooking(bookingId, rowElement) {
+            // Make a fetch call to delete the booking from the database
+            fetch('/api/delete_booking/' + bookingId, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(data => {
+                    // Show an alert message based on the response
+                    alert(data.message);
+                    // If the deletion was successful, remove the row from the table
+                    if (data.success) {
+                        rowElement.remove();
+                    }
+                })
+                .catch(error => alert('There was an error processing your request.'));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('http://127.0.0.1:5000/api/flight_details')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#ticketsTable tbody');
+                    if (data.length === 0) {
+                    alert('No TICKETS Booked');
+                    return;
+                }
+
+                data.forEach(ticket => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${ticket.id}</td>
+                        <td>${ticket.flight_id}</td>
+                        <td>${ticket.name}</td>
+                        <td>${ticket.origin_city}</td>
+                        <td>${ticket.destination_city}</td>
+                        <td>${ticket.airline}</td>
+                        <td>${ticket.depart_date}</td>
+                        <td>${ticket.seat_id}</td>
+                        <td>${ticket.duration}</td>
+                        <td>${ticket.price}</td>
+                        <td>
+                            <button class="delete-btn" onclick="deleteBooking(${ticket.id}, this.parentNode.parentNode)">Delete</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+            })
+            .catch(error => {
+                alert('No Tickets Booked');
+                console.error('Error:', error);
+            });
+    });
+    </script>
+</body>
+</html>

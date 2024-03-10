@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <title>{% block title %} {% endblock %}</title>
+    <title>TICEKTS BOOKED</title>
     <style>
     body {
       height: 100vh;
@@ -24,13 +24,18 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-md navbar-light bg-primary">
-        <a class="navbar-brand h3 text-white" href="{{ url_for('index') }}">Home</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav mr-auto">
-          </ul>
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                  <a class="navbar-brand mx-auto text-white" href="{{ url_for('bookedticket') }}">BOOKED TICKETS</a>
+                </li>
+            </ul>
+        </div>
+        <div class="mx-auto order-0">
+            <a class="navbar-brand mx-auto text-white" href="{{ url_for('index') }}">HOME</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
         </div>
     </nav>
     <div class="container mt-5">
@@ -42,9 +47,9 @@
                 <div class="ticket-body bg-light">
                     <div class="row">
                         <div class="col-sm-6 col-md-6 ticket-section">
-                            <h4>{{ flight_details.airline }}</h4>
-                            <p>Passenger Name: <strong>{{ flight_details.name }}</strong></p>
-                            <p>Class: <strong>{{ flight_details.seatId }}</strong></p>
+                            <p>AIRLINE: <strong>{{ flight_details.airline }} - {{flight_details.flight_id}}</strong></p>
+                            <p>Passenger Name: <strong>{{ passenger_details.name }}</strong></p>
+                            <p>Class: <strong>{{ passenger_details.seatId }}</strong></p>
                             <p>Origin: <strong>{{ flight_details.origin_city }}</strong></p>
                             <p>Destination: <strong>{{ flight_details.destination_city }}</strong></p>
                         </div>
@@ -56,7 +61,7 @@
                             <p>BaggageInfo: <strong>{{ flight_details.BaggageInfo }}</strong></p>
                         </div>
                         <div class="col-md-12 ticket-section text-center" style="margin-bottom: 0;">
-                            <h3>PRICE: {{ request.form.get('converted_price') }} {{ selected_currency }}</h3>                          
+                            <h3>PRICE:  ${{ converted_price }} {{ currency_code }}</h3>                          
                         </div>
                     </div>
                 </div>
@@ -97,9 +102,9 @@
     }
     
     .ticket-section {
-        margin-bottom: 15px;
-        padding-bottom: 15px;
-        border-bottom: 1px dotted #ccc;
+        margin-bottom: 10px;
+        padding-bottom: 3px;
+        border-bottom: 2px dotted #007bff;
     }
     
     .ticket-section:last-child {
@@ -112,11 +117,11 @@
         }
         .bg-primary {
             color: black;
-            background: white;
+            background: #007bff;
         }
         .text-white {
             color: black;
-            background: white;
+            background: #007bff;
         }
     }
     .info-box {
@@ -167,7 +172,9 @@
         </div>
         <div class="info-details">
             <p class="distance"><strong>Distance to Destination:</strong> {{ distance }}</p>
+            <p><strong>Driving Duration: {{ travel_duration }}</strong></p>
             <h3 class="city-name">City: {{ flight_details.destination_city }}</h3>
+            <p><strong>Time Zone:</strong> {{ timezone_offset }}</p>
             <div class="weather-info">
                 <h4>Current Weather</h4>
                 <p><strong>Temperature:</strong> {{ weather.main.temp }}&deg;C</p>
