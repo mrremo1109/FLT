@@ -1,3 +1,4 @@
 Flask
 flask-cors==3.0.10
 googlemaps==4.5.3
+pytz==2021.3

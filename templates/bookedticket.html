@@ -105,17 +105,14 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Rows will be inserted here using JavaScript -->
         </tbody>
     </table>
 
     <script>
         function deleteBooking(bookingId, rowElement) {
-            // Make a fetch call to delete the booking from the database
             fetch('/api/delete_booking/' + bookingId, { method: 'DELETE' })
                 .then(response => response.json())
                 .then(data => {
-                    // If the deletion was successful, remove the row from the table
                     if (data.success) {
                         rowElement.remove();
                     } else {
@@ -126,13 +123,10 @@
         }
 
         function deleteBooking(bookingId, rowElement) {
-            // Make a fetch call to delete the booking from the database
             fetch('/api/delete_booking/' + bookingId, { method: 'DELETE' })
                 .then(response => response.json())
                 .then(data => {
-                    // Show an alert message based on the response
                     alert(data.message);
-                    // If the deletion was successful, remove the row from the table
                     if (data.success) {
                         rowElement.remove();
                     }

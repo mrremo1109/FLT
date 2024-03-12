@@ -22,8 +22,6 @@ def execute_query(sql, params=None):
             cursor.execute(sql, params)
         else:
             cursor.execute(sql)
-
-        # For 'SELECT' queries, fetch the results and convert to a list of dictionaries
         if sql.strip().lower().startswith('select'):
             rows = cursor.fetchall()
             return [dict(row) for row in rows]
@@ -68,17 +66,13 @@ def get_flights_data():
 
 @app.route('/api/flights_data', methods=['GET'])
 def get_flights_data():
-    # Retrieve query parameters for origin and destination
     origin_city = request.args.get('originCity')
     destination_city = request.args.get('destinationCity')
     airline = request.args.get('airline')
     selected_currency = request.args.get('currency', 'USD')
-    NoofConnection = request.args.get('NoofConnection')  # Default to USD if not provided
+    NoofConnection = request.args.get('NoofConnection')
 
-    # Start with a base query
-    query = "SELECT * FROM flights WHERE 1=1"  # Start with a true condition
-
-    # Append to the query based on provided parameters
+    query = "SELECT * FROM flights WHERE 1=1"
     query_params = []
     if origin_city:
         query += " AND origin_city = ?"
@@ -92,15 +86,11 @@ def get_flights_data():
     if NoofConnection:
         query += " AND NoofConnection = ?"
         query_params.append(NoofConnection)
-
-    # Execute the query with the parameters
     flights_data = execute_query(query, query_params)
 
     if not flights_data:
         return jsonify({"error": "No flights data found"}), 404
-
-    # Currency conversion if necessary
-    conversion_rate = currency_rates.get(selected_currency, 1)  # Defaults to 1 if currency not found
+    conversion_rate = currency_rates.get(selected_currency, 1)
     for flight in flights_data:
         flight['converted_price'] = round(flight['price'] * conversion_rate, 2)
         flight['currency'] = selected_currency
@@ -222,13 +212,10 @@ def search_data():
 
 @app.route('/api/flight_details', methods=['GET'])
 def get_flight_details():
-    # Use the execute_query function to get data from flight_details table
     flight_details_data = execute_query("SELECT * FROM flight_details")
-
     if not flight_details_data:
         return jsonify({"error": "No flight details found"}), 404
 
-    # Serialize the SQL rows into a list of dicts, which can be easily converted to JSON
     flight_details = [dict(flight) for flight in flight_details_data]
 
     return jsonify(flight_details)
@@ -243,12 +230,6 @@ def search():
         rates = currency_rates
 
         return render_template('search.html', flights=flights, rates=rates)
-
-"""
-@app.route('/bookingdetails', methods=['POST'])
-def bookingdetails():
-    flight_details = request.form.to_dict()
-    return render_template('bookingdetails.html', flight_details=flight_details)"""
 
 def get_db_connection():
     connection = sqlite3.connect('database.db')
@@ -293,7 +274,6 @@ def get_timezone_offset(timezone):
     offset_str = f"{int(offset_hours):+03}:{int(offset_minutes):02}"
     return f"GMT{offset_str}, {timezone}"
 
-# Example usage:
 timezone_offset = get_timezone_offset("America/Los_Angeles")
 print(timezone_offset)
 
@@ -307,8 +287,6 @@ def get_weather_info(city_name, openweather_api_key):
     response = requests.get(endpoint_url, params=params)
     if response.status_code == 200:
         weather_info = response.json()
-
-        # Fetch timezone offset
         timezone_offset = pytz.timezone('UTC').utcoffset(datetime.now())
         timezone_offset_hours = timezone_offset.total_seconds() / 3600
         weather_info['timezone'] = f"UTC (GMT{timezone_offset_hours:+.2f})"
@@ -339,33 +317,28 @@ def create_flight_details_table():
                 )''')
     connection.commit()
     connection.close()
+    
 
 @app.route('/bookedticket')
 def bookedticket():
-    # Fetch booked tickets from the flight_details table
     booked_tickets = execute_query("SELECT * FROM flight_details")
-    # Pass the booked tickets to the template for rendering
     return render_template('bookedticket.html', booked_tickets=booked_tickets)
 
 @app.route('/api/delete_booking/<int:booking_id>', methods=['DELETE'])
 def delete_booking(booking_id):
     try:
-        # Step 1: Retrieve the booking based on the booking_id
         booking_sql = "SELECT flight_id FROM flight_details WHERE id = ?"
         booking_result = execute_query(booking_sql, (booking_id,))
         if not booking_result:
             return jsonify({"success": False, "message": "Booking not found."}), 404
         flight_id = booking_result[0]['flight_id']
         
-        # Step 2: Delete the booking
         delete_sql = "DELETE FROM flight_details WHERE id = ?"
         rows_affected = execute_query(delete_sql, (booking_id,))
         
         if rows_affected > 0:
-            # Step 3: Increment the available_seates for the associated flight
             update_seats_sql = "UPDATE flights SET available_seates = available_seates + 1 WHERE flight_id = ?"
             execute_query(update_seats_sql, (flight_id,))
-            # Step 4: Retrieve and return updated flight details
             updated_flight_details = execute_query("SELECT * FROM flights WHERE flight_id = ?", (flight_id,))
             return jsonify({"success": True, "message": "Booking deleted successfully", "flight_details": updated_flight_details}), 200
         else:

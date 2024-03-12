@@ -113,7 +113,6 @@ p {
                     <p class="card-text"><strong>Package Per Person:</strong> $800</p>
                     <p class="card-text"><strong>Stay:</strong> 5-star hotel</p>
                     <p class="card-text"><strong>Programs:</strong> Casino visits, Grand Canyon tour, LAS VEGAS shows</p>
-                    <button class="btn btn-primary" onclick="bookPackage('LAS VEGAS')">Book Now</button>
                 </div>
             </div>
         </div>
@@ -128,7 +127,6 @@ p {
                     <p class="card-text"><strong>Price Per Person:</strong> $1500</p>
                     <p class="card-text"><strong>Stay:</strong> Luxury hotel</p>
                     <p class="card-text"><strong>Programs:</strong> Statue of Liberty visit, Broadway shows, Central Park tour</p>
-                    <button class="btn btn-primary" onclick="bookPackage('NEW YORK')">Book Now</button>
                 </div>
             </div>
         </div>
@@ -143,18 +141,12 @@ p {
                     <p class="card-text"><strong>Price Per Person:</strong> $600</p>
                     <p class="card-text"><strong>Stay: Comfortable hotel</strong></p>
                     <p class="card-text"><strong>Programs: </strong>Rodeo show, DALLAS Museum of Art, Shopping at Galleria DALLAS</p>
-                    <button class="btn btn-primary" onclick="bookPackage('DALLAS')">Book Now</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-function bookPackage(destination) {
-  window.location.href = "/search?destination=" + encodeURIComponent(destination);
-}
-</script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
